@@ -5,3 +5,5 @@
 https://learn.microsoft.com/en-us/aspnet/core/security/authentication/2fa
 
 https://ecall-messaging.com/
+
+https://github.com/andrewlock/TwilioSamples/blob/master/src/SendVerificationSmsDemo
