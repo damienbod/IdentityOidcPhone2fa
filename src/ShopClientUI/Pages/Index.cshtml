@@ -1,0 +1,19 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h2 class="display-4">Welcome to shop client</h2>
+    @if (Model.Photo.Length > 0)
+    {
+        <img width="200" src="data:image;base64,@System.Convert.ToBase64String(Model.Photo!)" />
+    }
+    else
+    {
+        <p>No profile photo for this user</p>
+    }
+</div>

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35818.85 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityProvider", "src\IdentityProvider\IdentityProvider.csproj", "{84F1466A-B891-DE9D-C423-D55CF8F6A5F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopClientUI", "src\ShopClientUI\ShopClientUI.csproj", "{75710101-BBF4-1CE3-AAD9-9094133CFD79}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84F1466A-B891-DE9D-C423-D55CF8F6A5F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84F1466A-B891-DE9D-C423-D55CF8F6A5F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84F1466A-B891-DE9D-C423-D55CF8F6A5F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84F1466A-B891-DE9D-C423-D55CF8F6A5F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75710101-BBF4-1CE3-AAD9-9094133CFD79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75710101-BBF4-1CE3-AAD9-9094133CFD79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75710101-BBF4-1CE3-AAD9-9094133CFD79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75710101-BBF4-1CE3-AAD9-9094133CFD79}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4BD9612E-27BB-446A-B0D4-1069124F6A7A}
+	EndGlobalSection
+EndGlobal
