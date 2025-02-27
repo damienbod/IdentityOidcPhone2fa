@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 using Serilog;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace IdentityProvider;
 
@@ -25,12 +27,29 @@ internal static class HostingExtensions
         builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
         builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+        builder.Services.Configure<SmsOptions>(builder.Configuration.GetSection("SmsOptions"));
+        builder.Services.AddTransient<ISmsSender, SmsSender>();
+
+        var authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes(
+            $"{builder.Configuration["SmsOptions:Username"]}:{builder.Configuration["SmsOptions:Password"]}"));
+
+        builder.Services.AddHttpClient(Consts.SMSeColl, client =>
+        {
+            client.BaseAddress = new Uri($"{builder.Configuration["SmsOptions:Url"]}");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authorization);
+        });
+
+        builder.Services.AddScoped<SmsVerifyClient>();
+
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+            .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider)
+            .AddTokenProvider<AuthenticatorTokenProvider<ApplicationUser>>(TokenOptions.DefaultAuthenticatorProvider)
+            .AddTokenProvider<PhoneNumberTokenProvider<ApplicationUser>>(Consts.Phone)
+            .AddTokenProvider<EmailTokenProvider<ApplicationUser>>(Consts.Email);
 
         var shopclientUIUrl = builder.Configuration["ShopClientUIUrl"];
-        var adminclientUIUrl = builder.Configuration["AdminClientUIUrl"];
+
         builder.Services
             .AddIdentityServer(options =>
             {
