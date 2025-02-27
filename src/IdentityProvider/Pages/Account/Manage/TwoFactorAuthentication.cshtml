@@ -1,5 +1,5 @@
 ﻿@page
-@model TwoFactorAuthenticationModel
+@model IdentityProvider.Pages.Account.Manage.TwoFactorAuthenticationModel
 @{
     ViewData["Title"] = "Two-factor authentication (2FA)";
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
@@ -7,7 +7,7 @@
 
 <partial name="_StatusMessage" for="StatusMessage" />
 <h3>@ViewData["Title"]</h3>
-@if (Model.Is2faEnabled)
+@if (Model.Is2FaEnabled)
 {
     if (Model.RecoveryCodesLeft == 0)
     {
@@ -51,6 +51,22 @@ else
     <a id="enable-authenticator" asp-page="/Account/Manage/EnableAuthenticator" class="btn btn-primary">Setup authenticator app</a>
     <a id="reset-authenticator" asp-page="/Account/Manage/ResetAuthenticator" class="btn btn-primary">Reset authenticator app</a>
 }
+
+<h4>Phone 2FA</h4>
+@if (Model.IsPhone2FaConfirmed && !Model.IsPhone2FaEnabled)
+{
+    <a id="enable-phone2fa" asp-page="/Account/Manage/EnablePhone2Fa" class="btn btn-primary">Add Phone 2FA</a>
+}
+else if (Model.IsPhone2FaConfirmed && Model.IsPhone2FaEnabled)
+{
+    <strong>Phone 2FA enabled</strong>
+    <a id="disable-phone2fa" asp-page="/Account/Manage/DisablePhone2Fa" class="btn btn-primary">Disable Phone 2FA</a>
+}
+else
+{
+    <strong>Please add a phone number to your profile first.</strong>
+}
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -1,7 +1,8 @@
-﻿using IdentityProvider.Models;
+using IdentityProvider.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -13,8 +14,6 @@ public class EnableAuthenticatorModel : PageModel
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<EnableAuthenticatorModel> _logger;
     private readonly UrlEncoder _urlEncoder;
-
-    private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
     public EnableAuthenticatorModel(
         UserManager<ApplicationUser> userManager,
@@ -78,10 +77,10 @@ public class EnableAuthenticatorModel : PageModel
         // Strip spaces and hypens
         var verificationCode = Input.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
 
-        var is2faTokenValid = await _userManager.VerifyTwoFactorTokenAsync(
+        var is2FaTokenValid = await _userManager.VerifyTwoFactorTokenAsync(
             user, _userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
 
-        if (!is2faTokenValid)
+        if (!is2FaTokenValid)
         {
             ModelState.AddModelError("Input.Code", "Verification code is invalid.");
             await LoadSharedKeyAndQrCodeUriAsync(user);
@@ -90,6 +89,10 @@ public class EnableAuthenticatorModel : PageModel
 
         await _userManager.SetTwoFactorEnabledAsync(user, true);
         var userId = await _userManager.GetUserIdAsync(user);
+
+        user.AuthenticatorApp2FAEnabled = true;
+        await _userManager.UpdateAsync(user);
+
         _logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", userId);
 
         StatusMessage = "Your authenticator app has been verified.";
@@ -122,18 +125,18 @@ public class EnableAuthenticatorModel : PageModel
         AuthenticatorUri = GenerateQrCodeUri(email!, unformattedKey!);
     }
 
-    private string FormatKey(string unformattedKey)
+    private static string FormatKey(string unformattedKey)
     {
         var result = new StringBuilder();
         int currentPosition = 0;
         while (currentPosition + 4 < unformattedKey.Length)
         {
-            result.Append(unformattedKey.Substring(currentPosition, 4)).Append(" ");
+            result.Append(unformattedKey.AsSpan(currentPosition, 4)).Append(' ');
             currentPosition += 4;
         }
         if (currentPosition < unformattedKey.Length)
         {
-            result.Append(unformattedKey.Substring(currentPosition));
+            result.Append(unformattedKey.AsSpan(currentPosition));
         }
 
         return result.ToString().ToLowerInvariant();
@@ -141,10 +144,23 @@ public class EnableAuthenticatorModel : PageModel
 
     private string GenerateQrCodeUri(string email, string unformattedKey)
     {
-        return string.Format(
-            AuthenticatorUriFormat,
-            _urlEncoder.Encode("IdentityProvider"),
-            _urlEncoder.Encode(email),
-            unformattedKey);
+        var encodedIdpId = _urlEncoder.Encode(Consts.IdentityProviderTotp);
+        var encodedEmail = _urlEncoder.Encode(email);
+
+        var baseUri = new UriBuilder
+        {
+            Scheme = "otpauth",
+            Host = "totp",
+            Path = string.Join(':', encodedIdpId, encodedEmail)
+        }.ToString();
+
+        var queryParams = new Dictionary<string, string?>
+        {
+            { "secret", unformattedKey },
+            { "issuer", encodedIdpId },
+            { "digits", "6" }
+        };
+
+        return QueryHelpers.AddQueryString(baseUri, queryParams);
     }
 }

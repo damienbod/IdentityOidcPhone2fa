@@ -1,0 +1,23 @@
+﻿@page
+@model IdentityProvider.Pages.Account.Manage.VerifyPhone2FaModel
+@{
+    ViewData["Title"] = "Verify Phone 2FA";
+}
+
+<h2>Verify Phone 2FA</h2>
+
+<form method="post">
+    <p>
+        We have sent a confirmation code to @Model.Input.PhoneNumber
+        Enter the code you receive to confirm your phone number.
+    </p>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="Input.PhoneNumber" type="hidden" />
+
+    <div class="form-group">
+        <label for="Input_Code">Verification Code</label>
+        <input asp-for="Input.Code" class="form-control" />
+        <span asp-validation-for="Input.Code" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Verify</button>
+</form>
