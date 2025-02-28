@@ -9,10 +9,12 @@ namespace IdentityProvider.Pages.Account.Manage;
 public class VerifyPhone2FaModel : PageModel
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILogger<VerifyPhoneModel> _logger;
 
-    public VerifyPhone2FaModel(UserManager<ApplicationUser> userManager)
+    public VerifyPhone2FaModel(UserManager<ApplicationUser> userManager, ILogger<VerifyPhoneModel> logger)
     {
         _userManager = userManager;
+        _logger = logger;
     }
 
     [BindProperty]
@@ -35,6 +37,7 @@ public class VerifyPhone2FaModel : PageModel
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {
+            _logger.LogTrace("Unable to load user with ID: {UserId}", _userManager.GetUserId(User));
             return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
         }
 
@@ -55,4 +58,3 @@ public class VerifyPhone2FaModel : PageModel
         return RedirectToPage("./TwoFactorAuthentication");
     }
 }
-
