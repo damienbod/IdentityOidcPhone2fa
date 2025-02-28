@@ -9,14 +9,17 @@ public class SmsProvider
     private readonly HttpClient _httpClient;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SmsOptions _smsOptions;
+    private readonly ILogger<SmsProvider> _logger;
 
     public SmsProvider(IHttpClientFactory clientFactory,
         UserManager<ApplicationUser> userManager,
-        IOptions<SmsOptions> smsOptions)
+        IOptions<SmsOptions> smsOptions,
+        ILogger<SmsProvider> logger)
     {
         _httpClient = clientFactory.CreateClient(Consts.SMSeColl);
         _userManager = userManager;
         _smsOptions = smsOptions.Value;
+        _logger = logger;
     }
 
     public async Task<(bool Success, string? Error)> Send2FASmsAsync(ApplicationUser user, string phoneNumber)
@@ -41,6 +44,7 @@ public class SmsProvider
         }
         else
         {
+            _logger.LogWarning("Error sending SMS 2FA, {ReasonPhrase}", result.ReasonPhrase);
             return (false, result.ReasonPhrase);
         }
 
@@ -69,6 +73,7 @@ public class SmsProvider
         }
         else
         {
+            _logger.LogWarning("Error sending SMS for phone Verification, {ReasonPhrase}", result.ReasonPhrase);
             return (false, result.ReasonPhrase);
         }
 
@@ -83,7 +88,7 @@ public class SmsProvider
         return is2faTokenValid;
     }
 
-    public async Task EnableSms2FaAsync(ApplicationUser user, string phoneNumber)
+    public async Task<(bool Success, string? Error)> EnableSms2FaAsync(ApplicationUser user, string phoneNumber)
     {
         var token = await _userManager.GenerateChangePhoneNumberTokenAsync(user, phoneNumber);
         var message = $"Enable phone 2FA code: {token}";
@@ -99,5 +104,20 @@ public class SmsProvider
         };
 
         await _httpClient.PostAsJsonAsync("message", ecallMessage);
+
+        var result = await _httpClient.PostAsJsonAsync("message", ecallMessage);
+
+        string? messageResult;
+        if (result.IsSuccessStatusCode)
+        {
+            messageResult = await result.Content.ReadAsStringAsync();
+        }
+        else
+        {
+            _logger.LogWarning("Error sending SMS to enable phone 2FA, {ReasonPhrase}", result.ReasonPhrase);
+            return (false, result.ReasonPhrase);
+        }
+
+        return (true, messageResult);
     }
 }
