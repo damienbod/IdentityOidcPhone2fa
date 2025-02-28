@@ -4,6 +4,37 @@ All services use the [SmsProvider.cs](https://github.com/damienbod/IdentityOidcP
 
 This can be updated with any SMS provider.
 
+## Services setup:
+
+```csharp
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.Configure<SmsOptions>(builder.Configuration.GetSection("SmsOptions"));
+
+var authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes(
+    $"{builder.Configuration["SmsOptions:Username"]}:{builder.Configuration["SmsOptions:Password"]}"));
+
+builder.Services.AddHttpClient(Consts.SMSeColl, client =>
+{
+    client.BaseAddress = new Uri($"{builder.Configuration["SmsOptions:Url"]}");
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authorization);
+});
+
+builder.Services.AddScoped<SmsProvider>();
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider)
+    .AddTokenProvider<AuthenticatorTokenProvider<ApplicationUser>>(TokenOptions.DefaultAuthenticatorProvider)
+    .AddTokenProvider<PhoneNumberTokenProvider<ApplicationUser>>(Consts.Phone)
+    .AddTokenProvider<EmailTokenProvider<ApplicationUser>>(Consts.Email);
+
+```
+
 ## Step 1: Verify phone flow
 
 [VerifyPhone](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/VerifyPhone.cshtml.cs)
@@ -22,8 +53,11 @@ This can be updated with any SMS provider.
 
 ## Step 3: 2FA phone flow
 
-```csharp
-```
+[]()
+
+[]()
+
+
 
 ## Further flows
 
