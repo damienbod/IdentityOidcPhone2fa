@@ -11,6 +11,8 @@ public class SmsProvider
     private readonly SmsOptions _smsOptions;
     private readonly ILogger<SmsProvider> _logger;
 
+    private const string Message = "message";
+
     public SmsProvider(IHttpClientFactory clientFactory,
         UserManager<ApplicationUser> userManager,
         IOptions<SmsOptions> smsOptions,
@@ -35,7 +37,7 @@ public class SmsProvider
             }
         };
 
-        var result = await _httpClient.PostAsJsonAsync("message", ecallMessage);
+        var result = await _httpClient.PostAsJsonAsync(Message, ecallMessage);
 
         string? messageResult;
         if (result.IsSuccessStatusCode)
@@ -64,7 +66,7 @@ public class SmsProvider
             }
         };
 
-        var result = await _httpClient.PostAsJsonAsync("message", ecallMessage);
+        var result = await _httpClient.PostAsJsonAsync(Message, ecallMessage);
 
         string? messageResult;
         if (result.IsSuccessStatusCode)
@@ -103,9 +105,7 @@ public class SmsProvider
             }
         };
 
-        await _httpClient.PostAsJsonAsync("message", ecallMessage);
-
-        var result = await _httpClient.PostAsJsonAsync("message", ecallMessage);
+        var result = await _httpClient.PostAsJsonAsync(Message, ecallMessage);
 
         string? messageResult;
         if (result.IsSuccessStatusCode)
