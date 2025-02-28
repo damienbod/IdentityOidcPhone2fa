@@ -15,9 +15,9 @@ public class VerifyPhoneModel : PageModel
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<VerifyPhoneModel> _logger;
 
-    public VerifyPhoneModel(SmsProvider client, UserManager<ApplicationUser> userManager, ILogger<VerifyPhoneModel> logger)
+    public VerifyPhoneModel(SmsProvider smsProvider, UserManager<ApplicationUser> userManager, ILogger<VerifyPhoneModel> logger)
     {
-        _smsProvider = client;
+        _smsProvider = smsProvider;
         _userManager = userManager;
         _logger = logger;
     }

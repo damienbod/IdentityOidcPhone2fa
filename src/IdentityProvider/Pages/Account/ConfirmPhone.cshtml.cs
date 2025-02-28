@@ -11,13 +11,13 @@ namespace IdentityProvider.Pages.Account;
 [Authorize]
 public class ConfirmPhoneModel : PageModel
 {
-    private readonly SmsProvider _client;
+    private readonly SmsProvider _smsProvider;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<ConfirmPhoneModel> _logger;
 
-    public ConfirmPhoneModel(SmsProvider client, UserManager<ApplicationUser> userManager, ILogger<ConfirmPhoneModel> logger)
+    public ConfirmPhoneModel(SmsProvider smsProvider, UserManager<ApplicationUser> userManager, ILogger<ConfirmPhoneModel> logger)
     {
-        _client = client;
+        _smsProvider = smsProvider;
         _userManager = userManager;
         _logger = logger;
     }
@@ -68,7 +68,7 @@ public class ConfirmPhoneModel : PageModel
 
         if (applicationUser != null)
         {
-            var validCodeForUserSession = await _client.CheckVerificationAsync(applicationUser,
+            var validCodeForUserSession = await _smsProvider.CheckVerificationAsync(applicationUser,
                 phoneNumber, code);
 
             return await ProcessValidCode(applicationUser, validCodeForUserSession);
