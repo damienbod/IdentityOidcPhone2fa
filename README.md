@@ -41,7 +41,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 [ConfirmPhone](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/ConfirmPhone.cshtml.cs)
 
-## Step 2: Enable phone 2FA
+## Step 2: Enable phone 2FA flow
 
 [TwoFactorAuthentication](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/Manage/TwoFactorAuthentication.cshtml.cs)
 
@@ -54,10 +54,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 ## Step 3: 2FA phone flow
 
 [LoginWith2Fa](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/LoginWith2Fa.cshtml.cs)
-
-[]()
-
-
 
 ## Further flows
 
