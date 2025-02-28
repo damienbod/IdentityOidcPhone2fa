@@ -1,18 +1,18 @@
-﻿using IdentityProvider.Models;
+using IdentityProvider.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IdentityProvider.Pages.Account.Manage;
 
-public class Disable2faModel : PageModel
+public class DisablePhone2FaModel : PageModel
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ILogger<Disable2faModel> _logger;
+    private readonly ILogger<DisablePhone2FaModel> _logger;
 
-    public Disable2faModel(
+    public DisablePhone2FaModel(
         UserManager<ApplicationUser> userManager,
-        ILogger<Disable2faModel> logger)
+        ILogger<DisablePhone2FaModel> logger)
     {
         _userManager = userManager;
         _logger = logger;
@@ -26,6 +26,7 @@ public class Disable2faModel : PageModel
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {
+            _logger.LogTrace("Unable to load user with ID: {UserId}", _userManager.GetUserId(User));
             return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
         }
 
@@ -42,17 +43,25 @@ public class Disable2faModel : PageModel
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {
+            _logger.LogTrace("Unable to load user with ID: {UserId}", _userManager.GetUserId(User));
             return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
         }
 
-        var disable2faResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
-        if (!disable2faResult.Succeeded)
+        user.Phone2FAEnabled = false;
+
+        await _userManager.UpdateAsync(user);
+
+        if (!user.Passkeys2FAEnabled && !user.AuthenticatorApp2FAEnabled && !user.Email2FAEnabled)
         {
-            throw new InvalidOperationException($"Unexpected error occurred disabling 2FA for user with ID '{_userManager.GetUserId(User)}'.");
+            var disable2FaResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
+            if (!disable2FaResult.Succeeded)
+            {
+                throw new InvalidOperationException($"Unexpected error occurred disabling 2FA for user with ID '{_userManager.GetUserId(User)}'.");
+            }
         }
 
-        _logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", _userManager.GetUserId(User));
-        StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
+        _logger.LogInformation("User with ID '{UserId}' has disabled phone 2fa.", _userManager.GetUserId(User));
+        StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup a second factor";
         return RedirectToPage("./TwoFactorAuthentication");
     }
 }

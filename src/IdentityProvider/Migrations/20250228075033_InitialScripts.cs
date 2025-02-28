@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace IdentityProvider.Migrations
 {
     /// <inheritdoc />
-    public partial class init_identity_new : Migration
+    public partial class InitialScripts : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +31,12 @@ namespace IdentityProvider.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EntraIdOid = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Phone2FAEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    Email2FAEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AuthenticatorApp2FAEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    Passkeys2FAEnabled = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -187,6 +194,16 @@ namespace IdentityProvider.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_EntraIdOid",
+                table: "AspNetUsers",
+                column: "EntraIdOid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_TenantId",
+                table: "AspNetUsers",
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

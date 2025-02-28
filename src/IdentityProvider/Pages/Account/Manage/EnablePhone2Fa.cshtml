@@ -1,0 +1,15 @@
+﻿@page
+@model IdentityProvider.Pages.Account.Manage.EnablePhone2FaModel
+@{
+    ViewData["Title"] = "Enable Phone 2FA";
+}
+
+<h2>Enable Phone 2FA</h2>
+<form method="post">
+    <div class="form-group">
+        <label for="Input_PhoneNumber">Phone Number</label>
+        <input asp-for="Input.PhoneNumber" readonly class="form-control" />
+        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Send Code</button>
+</form>

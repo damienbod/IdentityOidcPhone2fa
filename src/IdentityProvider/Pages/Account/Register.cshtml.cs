@@ -1,4 +1,4 @@
-﻿using IdentityProvider.Models;
+using IdentityProvider.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -66,7 +66,8 @@ public class RegisterModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
-        returnUrl ??= Url.Content("~/");
+        if (string.IsNullOrEmpty(returnUrl))
+            returnUrl = Url.Content("~/");
         ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         if (ModelState.IsValid)
         {
@@ -81,7 +82,7 @@ public class RegisterModel : PageModel
                 var callbackUrl = Url.Page(
                     "/Account/ConfirmEmail",
                     pageHandler: null,
-                    values: new { userId = user.Id, code = code, returnUrl = returnUrl },
+                    values: new { userId = user.Id, code, returnUrl },
                     protocol: Request.Scheme);
 
                 await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -89,7 +90,7 @@ public class RegisterModel : PageModel
 
                 if (_userManager.Options.SignIn.RequireConfirmedAccount)
                 {
-                    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl });
                 }
                 else
                 {

@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 using Serilog;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace IdentityProvider;
 
@@ -25,12 +27,28 @@ internal static class HostingExtensions
         builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
         builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+        builder.Services.Configure<SmsOptions>(builder.Configuration.GetSection("SmsOptions"));
+
+        var authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes(
+            $"{builder.Configuration["SmsOptions:Username"]}:{builder.Configuration["SmsOptions:Password"]}"));
+
+        builder.Services.AddHttpClient(Consts.SMSeColl, client =>
+        {
+            client.BaseAddress = new Uri($"{builder.Configuration["SmsOptions:Url"]}");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authorization);
+        });
+
+        builder.Services.AddScoped<SmsProvider>();
+
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+            .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider)
+            .AddTokenProvider<AuthenticatorTokenProvider<ApplicationUser>>(TokenOptions.DefaultAuthenticatorProvider)
+            .AddTokenProvider<PhoneNumberTokenProvider<ApplicationUser>>(Consts.Phone)
+            .AddTokenProvider<EmailTokenProvider<ApplicationUser>>(Consts.Email);
 
         var shopclientUIUrl = builder.Configuration["ShopClientUIUrl"];
-        var adminclientUIUrl = builder.Configuration["AdminClientUIUrl"];
+
         builder.Services
             .AddIdentityServer(options =>
             {
@@ -69,25 +87,6 @@ internal static class HostingExtensions
             .AddDistributedTokenCaches();
 
         builder.Services.AddAuthentication()
-            .AddMicrosoftIdentityWebApp(options =>
-            {
-                builder.Configuration.Bind("EntraIDAdmin", options);
-                options.SignInScheme = "adminentraidcookie";
-                options.UsePkce = true;
-                options.Events = new OpenIdConnectEvents
-                {
-                    OnTokenResponseReceived = context =>
-                    {
-                        var idToken = context.TokenEndpointResponse.IdToken;
-                        return Task.CompletedTask;
-                    }
-                };
-            }, copt => { }, "AdminEntraID", "adminentraidcookie", false, "Admin ME-ID")
-            .EnableTokenAcquisitionToCallDownstreamApi(["User.Read"])
-            .AddMicrosoftGraph()
-            .AddDistributedTokenCaches();
-
-        builder.Services.AddAuthentication()
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
              {
                  var oauthConfig = builder.Configuration.GetSection("ProfileApiConfigurations");
@@ -108,15 +107,13 @@ internal static class HostingExtensions
                   return SecurityHeadersDefinitionsWeakened.GetHeaderPolicyCollection(
                       builder.Environment.IsDevelopment(),
                       builder.Configuration["AzureAd:Instance"],
-                      builder.Configuration["ShopClientUIUrl"]!,
-                      builder.Configuration["AdminClientUIUrl"]!);
+                      builder.Configuration["ShopClientUIUrl"]!);
               }
 
               return SecurityHeadersDefinitions.GetHeaderPolicyCollection(
                   builder.Environment.IsDevelopment(),
                   builder.Configuration["AzureAd:Instance"],
-                  builder.Configuration["ShopClientUIUrl"]!,
-                  builder.Configuration["AdminClientUIUrl"]!);
+                  builder.Configuration["ShopClientUIUrl"]!);
           });
 
         return builder.Build();

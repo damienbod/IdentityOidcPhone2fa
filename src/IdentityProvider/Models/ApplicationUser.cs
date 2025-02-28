@@ -14,4 +14,9 @@ public class ApplicationUser : IdentityUser
     public Guid? EntraIdOid { get; set; }
 
     public Guid? TenantId { get; set; }
+
+    public bool Phone2FAEnabled { get; set; }
+    public bool Email2FAEnabled { get; set; }
+    public bool AuthenticatorApp2FAEnabled { get; set; }
+    public bool Passkeys2FAEnabled { get; set; }
 }
