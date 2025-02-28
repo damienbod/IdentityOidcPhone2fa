@@ -23,7 +23,7 @@ public class SmsVerifyClient
             To = phoneNumber,
             Content = new EcallContent
             {
-                Text = $"2FA Code: {code}"
+                Text = $"2FA code: {code}"
             }
         };
 
@@ -50,7 +50,7 @@ public class SmsVerifyClient
             To = phoneNumber,
             Content = new EcallContent
             {
-                Text = $"Code: {token}"
+                Text = $"Verify code: {token}"
             }
         };
 
