@@ -13,11 +13,13 @@ public class VerifyPhoneModel : PageModel
 {
     private readonly SmsProvider _client;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILogger<VerifyPhoneModel> _logger;
 
-    public VerifyPhoneModel(SmsProvider client, UserManager<ApplicationUser> userManager)
+    public VerifyPhoneModel(SmsProvider client, UserManager<ApplicationUser> userManager, ILogger<VerifyPhoneModel> logger)
     {
         _client = client;
         _userManager = userManager;
+        _logger = logger;
     }
 
     [BindProperty]
@@ -43,6 +45,7 @@ public class VerifyPhoneModel : PageModel
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
+                _logger.LogTrace("Unable to load user with ID: {UserId}", _userManager.GetUserId(User));
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
@@ -53,12 +56,13 @@ public class VerifyPhoneModel : PageModel
                 return RedirectToPage("ConfirmPhone", new { Input.PhoneNumber });
             }
 
+            _logger.LogTrace("There was an error sending the verification code: {Error}", result.Error);
             ModelState.AddModelError("", $"There was an error sending the verification code: {result.Error}");
         }
         catch (Exception)
         {
-            ModelState.AddModelError("",
-                "There was an error sending the verification code, please check the phone number is correct and try again");
+            _logger.LogWarning("There was an error sending the verification code, please check the phone number is correct and try again");
+            ModelState.AddModelError("", "There was an error sending the verification code, please check the phone number is correct and try again");
         }
 
         return Page();
