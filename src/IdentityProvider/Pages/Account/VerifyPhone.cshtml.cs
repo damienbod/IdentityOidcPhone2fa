@@ -61,7 +61,6 @@ public class VerifyPhoneModel : PageModel
         }
         catch (Exception)
         {
-            _logger.LogWarning("There was an error sending the verification code, please check the phone number is correct and try again");
             ModelState.AddModelError("", "There was an error sending the verification code, please check the phone number is correct and try again");
         }
 
