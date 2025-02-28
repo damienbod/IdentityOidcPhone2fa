@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Options;
 
 namespace IdentityProvider.Services;
