@@ -60,7 +60,7 @@ public class EnablePhone2FaModel : PageModel
         }
 
         var token = await _userManager.GenerateChangePhoneNumberTokenAsync(user, Input.PhoneNumber);
-        await _smsSender.SendSmsAsync(Input.PhoneNumber, $"Phone enable code: {token}");
+        await _smsSender.SendSmsAsync(Input.PhoneNumber, $"Phone enable 2FA code: {token}");
 
         return RedirectToPage("./VerifyPhone2Fa", new { PhoneNumber = Input.PhoneNumber });
     }
