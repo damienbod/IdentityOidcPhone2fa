@@ -26,6 +26,7 @@ public class Disable2faModel : PageModel
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {
+            _logger.LogTrace("Unable to load user with ID: {UserId}", _userManager.GetUserId(User));
             return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
         }
 
@@ -42,6 +43,7 @@ public class Disable2faModel : PageModel
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {
+            _logger.LogTrace("Unable to load user with ID: {UserId}", _userManager.GetUserId(User));
             return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
         }
 
