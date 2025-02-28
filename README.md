@@ -1,5 +1,20 @@
 # ASP.NET Core Identity & OpenID Connect using Phone 2FA
 
+## Verify phone flow
+
+```csharp
+```
+
+## Enable phone 2FA
+
+```csharp
+```
+
+## 2FA phone flow
+
+```csharp
+```
+
 ## Database
 
 ```
