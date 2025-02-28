@@ -64,7 +64,7 @@ else if (Model.IsPhone2FaConfirmed && Model.IsPhone2FaEnabled)
 }
 else
 {
-    <strong>Please add a phone number to your profile first.</strong>
+    <a id="disable-phone2fa" asp-page="/Account/VerifyPhone" class="btn btn-link">Please add a phone number to your profile.</a>
 }
 
 
