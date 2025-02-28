@@ -111,14 +111,17 @@ public class LoginWith2FaModel : PageModel
         Microsoft.AspNetCore.Identity.SignInResult? result = null;
         if (user.AuthenticatorApp2FAEnabled && (Input.Authmethod != Consts.Phone) && (Input.Authmethod != Consts.Email))
         {
+            _logger.LogTrace("User with ID '{UserId}' logged in with 2fa uing Authenticator App.", user.Id);
             result = await _signInManager.TwoFactorAuthenticatorSignInAsync(code, rememberMe, Input.RememberMachine);
         }
         else if (user.Phone2FAEnabled && (Input.Authmethod != Consts.Email))
         {
+            _logger.LogTrace("User with ID '{UserId}' logged in with 2fa uing Phone (SMS)", user.Id);
             result = await _signInManager.TwoFactorSignInAsync(Consts.Phone, code, rememberMe, Input.RememberMachine);
         }
         else if (user.Email2FAEnabled)
         {
+            _logger.LogTrace("User with ID '{UserId}' logged in with 2fa uing Email code", user.Id);
             result = await _signInManager.TwoFactorSignInAsync(Consts.Email, code, rememberMe, Input.RememberMachine);
         }
 
