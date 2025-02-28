@@ -59,11 +59,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 ### Phone only authentication 
 
-Requires mass usage protection
+Requires mass usage protection, a captcha should be used or an authenticated user.
 
 ### Recover account using Phone authentication 
 
-Requires mass usage protection
+Requires mass usage protection, a captcha should be used or an authenticated user.
 
 ## Database
 
