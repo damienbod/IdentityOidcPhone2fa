@@ -56,7 +56,7 @@ public class SmsProvider
         var token = await _userManager.GenerateChangePhoneNumberTokenAsync(user, phoneNumber);
         var ecallMessage = new EcallMessage
         {
-            To = phoneNumber, 
+            To = phoneNumber,
             From = _smsOptions.Sender,
             Content = new EcallContent
             {

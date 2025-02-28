@@ -9,5 +9,5 @@ public static class Consts
     public const string SMSeColl = "sms-eCall";
 
     public const string IdentityProviderTotp = "IdentityProvider";
-    
+
 }
