@@ -82,4 +82,22 @@ public class SmsVerifyClient
 
         return is2faTokenValid;
     }
+
+    public async Task EnableSms2FaAsync(ApplicationUser user, string phoneNumber)
+    {
+        var token = await _userManager.GenerateChangePhoneNumberTokenAsync(user, phoneNumber);
+        var message = $"Enable phone 2FA code: {token}";
+
+        var ecallMessage = new EcallMessage
+        {
+            To = phoneNumber,
+            From = _smsOptions.Sender,
+            Content = new EcallContent
+            {
+                Text = message
+            }
+        };
+
+        await _httpClient.PostAsJsonAsync("message", ecallMessage);
+    }
 }

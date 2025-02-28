@@ -10,12 +10,12 @@ namespace IdentityProvider.Pages.Account.Manage;
 public class EnablePhone2FaModel : PageModel
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ISmsSender _smsSender;
+    private readonly SmsVerifyClient _smsVerifyClient;
 
-    public EnablePhone2FaModel(UserManager<ApplicationUser> userManager, ISmsSender smsSender)
+    public EnablePhone2FaModel(UserManager<ApplicationUser> userManager, SmsVerifyClient smsVerifyClient)
     {
         _userManager = userManager;
-        _smsSender = smsSender;
+        _smsVerifyClient = smsVerifyClient;
     }
 
     [BindProperty]
@@ -56,12 +56,11 @@ public class EnablePhone2FaModel : PageModel
 
         if (user.PhoneNumber != Input.PhoneNumber)
         {
-            ModelState.AddModelError("Input.PhoneNumber", $"Phone number does not match user user, please update or add phone in your profile");
+            ModelState.AddModelError("Input.PhoneNumber", "Phone number does not match user user, please update or add phone in your profile");
         }
 
-        var token = await _userManager.GenerateChangePhoneNumberTokenAsync(user, Input.PhoneNumber);
-        await _smsSender.SendSmsAsync(Input.PhoneNumber, $"Enable phone 2FA code: {token}");
+        await _smsVerifyClient.EnableSms2FaAsync(user, Input.PhoneNumber!);
 
-        return RedirectToPage("./VerifyPhone2Fa", new { PhoneNumber = Input.PhoneNumber });
+        return RedirectToPage("./VerifyPhone2Fa", new { Input.PhoneNumber });
     }
 }

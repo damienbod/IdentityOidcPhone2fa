@@ -28,7 +28,6 @@ internal static class HostingExtensions
         builder.Services.AddTransient<IEmailSender, EmailSender>();
 
         builder.Services.Configure<SmsOptions>(builder.Configuration.GetSection("SmsOptions"));
-        builder.Services.AddTransient<ISmsSender, SmsSender>();
 
         var authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes(
             $"{builder.Configuration["SmsOptions:Username"]}:{builder.Configuration["SmsOptions:Password"]}"));
