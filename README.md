@@ -53,7 +53,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 ## Step 3: 2FA phone flow
 
-[]()
+[LoginWith2Fa](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/LoginWith2Fa.cshtml.cs)
 
 []()
 
