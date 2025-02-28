@@ -13,11 +13,13 @@ public class ConfirmPhoneModel : PageModel
 {
     private readonly SmsProvider _client;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILogger<ConfirmPhoneModel> _logger;
 
-    public ConfirmPhoneModel(SmsProvider client, UserManager<ApplicationUser> userManager)
+    public ConfirmPhoneModel(SmsProvider client, UserManager<ApplicationUser> userManager, ILogger<ConfirmPhoneModel> logger)
     {
         _client = client;
         _userManager = userManager;
+        _logger = logger;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -49,10 +51,12 @@ public class ConfirmPhoneModel : PageModel
             else
             {
                 ModelState.AddModelError("", "Input.PhoneNumber or Input.VerificationCode missing");
+                _logger.LogTrace("Input.PhoneNumber or Input.VerificationCode missing {PhoneNumber} {VerificationCode}", Input.PhoneNumber, Input.VerificationCode);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogWarning("There was an error confirming the code, please check the verification code is correct and try again {Exception}", ex.Message);
             ModelState.AddModelError("", "There was an error confirming the code, please check the verification code is correct and try again");
         }
 
@@ -73,6 +77,7 @@ public class ConfirmPhoneModel : PageModel
         else
         {
             ModelState.AddModelError("", "No user");
+            _logger.LogTrace("No user for this session");
             return Page();
         }
     }
@@ -96,11 +101,13 @@ public class ConfirmPhoneModel : PageModel
             }
             else
             {
+                _logger.LogTrace("There was an error confirming the verification code, please try again");
                 ModelState.AddModelError("", "There was an error confirming the verification code, please try again");
             }
         }
         else
         {
+            _logger.LogTrace("There was an error confirming the verification code");
             ModelState.AddModelError("", "There was an error confirming the verification code");
         }
 
