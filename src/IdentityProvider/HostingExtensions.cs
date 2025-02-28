@@ -38,7 +38,7 @@ internal static class HostingExtensions
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authorization);
         });
 
-        builder.Services.AddScoped<SmsVerifyClient>();
+        builder.Services.AddScoped<SmsProvider>();
 
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()

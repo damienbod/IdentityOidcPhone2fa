@@ -10,9 +10,9 @@ namespace IdentityProvider.Pages.Account.Manage;
 public class EnablePhone2FaModel : PageModel
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SmsVerifyClient _smsVerifyClient;
+    private readonly SmsProvider _smsVerifyClient;
 
-    public EnablePhone2FaModel(UserManager<ApplicationUser> userManager, SmsVerifyClient smsVerifyClient)
+    public EnablePhone2FaModel(UserManager<ApplicationUser> userManager, SmsProvider smsVerifyClient)
     {
         _userManager = userManager;
         _smsVerifyClient = smsVerifyClient;

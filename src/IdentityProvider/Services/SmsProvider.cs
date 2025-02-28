@@ -4,13 +4,13 @@ using Microsoft.Extensions.Options;
 
 namespace IdentityProvider.Services;
 
-public class SmsVerifyClient
+public class SmsProvider
 {
     private readonly HttpClient _httpClient;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SmsOptions _smsOptions;
 
-    public SmsVerifyClient(IHttpClientFactory clientFactory,
+    public SmsProvider(IHttpClientFactory clientFactory,
         UserManager<ApplicationUser> userManager,
         IOptions<SmsOptions> smsOptions)
     {

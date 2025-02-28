@@ -11,10 +11,10 @@ namespace IdentityProvider.Pages.Account;
 [Authorize]
 public class ConfirmPhoneModel : PageModel
 {
-    private readonly SmsVerifyClient _client;
+    private readonly SmsProvider _client;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public ConfirmPhoneModel(SmsVerifyClient client, UserManager<ApplicationUser> userManager)
+    public ConfirmPhoneModel(SmsProvider client, UserManager<ApplicationUser> userManager)
     {
         _client = client;
         _userManager = userManager;

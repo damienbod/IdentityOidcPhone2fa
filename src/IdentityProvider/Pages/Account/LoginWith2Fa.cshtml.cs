@@ -13,10 +13,10 @@ public class LoginWith2FaModel : PageModel
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ILogger<LoginWith2FaModel> _logger;
-    private readonly SmsVerifyClient _smsVerifyClient;
+    private readonly SmsProvider _smsVerifyClient;
 
     public LoginWith2FaModel(SignInManager<ApplicationUser> signInManager,
-        SmsVerifyClient smsVerifyClient, ILogger<LoginWith2FaModel> logger)
+        SmsProvider smsVerifyClient, ILogger<LoginWith2FaModel> logger)
     {
         _signInManager = signInManager;
         _logger = logger;
