@@ -54,7 +54,7 @@ public class ConfirmPhoneModel : PageModel
                 _logger.LogTrace("Input.PhoneNumber or Input.VerificationCode missing {PhoneNumber} {VerificationCode}", Input.PhoneNumber, Input.VerificationCode);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             ModelState.AddModelError("", "There was an error confirming the code, please check the verification code is correct and try again");
         }
