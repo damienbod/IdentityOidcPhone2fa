@@ -6,4 +6,5 @@ public class SmsOptions
     public string Username { get; set; } = null!;
     public string Password { get; set; } = null!;
     public string Channel { get; set; } = "sms";
+    public string Sender { get; set; } = null!;
 }

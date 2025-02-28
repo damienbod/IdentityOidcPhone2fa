@@ -1,5 +1,6 @@
 using IdentityProvider.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace IdentityProvider.Services;
 
@@ -7,12 +8,15 @@ public class SmsVerifyClient
 {
     private readonly HttpClient _httpClient;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SmsOptions _smsOptions;
 
     public SmsVerifyClient(IHttpClientFactory clientFactory,
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager,
+        IOptions<SmsOptions> smsOptions)
     {
         _httpClient = clientFactory.CreateClient(Consts.SMSeColl);
         _userManager = userManager;
+        _smsOptions = smsOptions.Value;
     }
 
     public async Task<(bool Success, string? Error)> Send2FASmsAsync(ApplicationUser user, string phoneNumber)
@@ -47,7 +51,8 @@ public class SmsVerifyClient
         var token = await _userManager.GenerateChangePhoneNumberTokenAsync(user, phoneNumber);
         var ecallMessage = new EcallMessage
         {
-            To = phoneNumber,
+            To = phoneNumber, 
+            From = _smsOptions.Sender,
             Content = new EcallContent
             {
                 Text = $"Verify code: {token}"

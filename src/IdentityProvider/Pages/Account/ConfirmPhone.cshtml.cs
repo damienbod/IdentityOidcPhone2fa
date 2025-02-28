@@ -25,12 +25,10 @@ public class ConfirmPhoneModel : PageModel
 
     public class InputModel
     {
-        [Required]
         [Phone]
         [Display(Name = "Phone number")]
         public string? PhoneNumber { get; set; }
 
-        [Required]
         [Display(Name = "Code")]
         public string? VerificationCode { get; set; }
     }
