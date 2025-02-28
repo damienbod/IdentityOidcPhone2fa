@@ -1,5 +1,7 @@
 # ASP.NET Core Identity & OpenID Connect using Phone 2FA
 
+A demo to implement phone (SMS) verification and two-factor authentication (2FA) using ASP.NET Core Identity. The solution integrates phone-based verification and 2FA mechanisms. The implementation uses ASP.NET Core Identity’s extensibility to incorporate SMS-based verification during user registration and login processes. SMS is no longer a recommended authentication method due to security risks but does provide a good solution for some business cases or user flows like onboarding phone users or phone applications, frontline workers with no desktop or other such solutions.
+
 All services use the [SmsProvider.cs](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Services/SmsProvider.cs) to send SMS messages.
 
 This can be updated with any SMS provider.
