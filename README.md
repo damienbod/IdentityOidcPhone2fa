@@ -12,9 +12,13 @@ This can be updated with any SMS provider.
 
 ## Step 2: Enable phone 2FA
 
-[]()
+[TwoFactorAuthentication](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/Manage/TwoFactorAuthentication.cshtml.cs)
 
-[]()
+[EnablePhone2Fa](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/Manage/EnablePhone2Fa.cshtml.cs)
+
+[VerifyPhone2Fa](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/Manage/VerifyPhone2Fa.cshtml.cs)
+
+[DisablePhone2Fa](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/Manage/DisablePhone2Fa.cshtml.cs)
 
 ## Step 3: 2FA phone flow
 
