@@ -88,25 +88,6 @@ internal static class HostingExtensions
             .AddDistributedTokenCaches();
 
         builder.Services.AddAuthentication()
-            .AddMicrosoftIdentityWebApp(options =>
-            {
-                builder.Configuration.Bind("EntraIDAdmin", options);
-                options.SignInScheme = "adminentraidcookie";
-                options.UsePkce = true;
-                options.Events = new OpenIdConnectEvents
-                {
-                    OnTokenResponseReceived = context =>
-                    {
-                        var idToken = context.TokenEndpointResponse.IdToken;
-                        return Task.CompletedTask;
-                    }
-                };
-            }, copt => { }, "AdminEntraID", "adminentraidcookie", false, "Admin ME-ID")
-            .EnableTokenAcquisitionToCallDownstreamApi(["User.Read"])
-            .AddMicrosoftGraph()
-            .AddDistributedTokenCaches();
-
-        builder.Services.AddAuthentication()
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
              {
                  var oauthConfig = builder.Configuration.GetSection("ProfileApiConfigurations");
