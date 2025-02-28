@@ -9,9 +9,9 @@ namespace IdentityProvider.Pages.Account.Manage;
 public class VerifyPhone2FaModel : PageModel
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ILogger<VerifyPhoneModel> _logger;
+    private readonly ILogger<VerifyPhone2FaModel> _logger;
 
-    public VerifyPhone2FaModel(UserManager<ApplicationUser> userManager, ILogger<VerifyPhoneModel> logger)
+    public VerifyPhone2FaModel(UserManager<ApplicationUser> userManager, ILogger<VerifyPhone2FaModel> logger)
     {
         _userManager = userManager;
         _logger = logger;

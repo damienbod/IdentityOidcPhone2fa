@@ -56,7 +56,6 @@ public class ConfirmPhoneModel : PageModel
         }
         catch (Exception ex)
         {
-            _logger.LogWarning("There was an error confirming the code, please check the verification code is correct and try again {Exception}", ex.Message);
             ModelState.AddModelError("", "There was an error confirming the code, please check the verification code is correct and try again");
         }
 
