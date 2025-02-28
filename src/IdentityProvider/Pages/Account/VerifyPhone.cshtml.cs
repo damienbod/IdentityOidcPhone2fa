@@ -11,13 +11,13 @@ namespace IdentityProvider.Pages.Account;
 [Authorize]
 public class VerifyPhoneModel : PageModel
 {
-    private readonly SmsProvider _client;
+    private readonly SmsProvider _smsProvider;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<VerifyPhoneModel> _logger;
 
     public VerifyPhoneModel(SmsProvider client, UserManager<ApplicationUser> userManager, ILogger<VerifyPhoneModel> logger)
     {
-        _client = client;
+        _smsProvider = client;
         _userManager = userManager;
         _logger = logger;
     }
@@ -49,7 +49,7 @@ public class VerifyPhoneModel : PageModel
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var result = await _client.StartVerificationAsync(user, Input.PhoneNumber);
+            var result = await _smsProvider.StartVerificationAsync(user, Input.PhoneNumber);
 
             if (result.Success)
             {
