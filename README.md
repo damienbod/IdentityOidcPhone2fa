@@ -46,13 +46,13 @@ public bool AuthenticatorApp2FAEnabled { get; set; }
 public bool Passkeys2FAEnabled { get; set; }
 ```
 
-## Step 1: Verify phone flow
+## Flow 1: Verify phone
 
 [VerifyPhone](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/VerifyPhone.cshtml.cs)
 
 [ConfirmPhone](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/ConfirmPhone.cshtml.cs)
 
-## Step 2: Enable phone 2FA flow
+## Flow 2: Enable phone 2FA using SMS
 
 [TwoFactorAuthentication](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/Manage/TwoFactorAuthentication.cshtml.cs)
 
@@ -66,7 +66,7 @@ All Razor Pages that Enable or disable authentication methods require updates to
 
 [EnableAuthenticator](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/Manage/EnableAuthenticator.cshtml.cs)
 
-## Step 3: 2FA phone flow
+## Flow 3: SMS 2FA using phone
 
 [LoginWith2Fa](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/LoginWith2Fa.cshtml.cs)
 
