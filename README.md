@@ -37,6 +37,15 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 ```
 
+The **ApplicationUser** needs some new properties to support multiple authentication methods. The properties are used to allow a user to use the selected authentication method or force an authentication on a OpenID Connect client.
+
+```csharp
+public bool Phone2FAEnabled { get; set; }
+public bool Email2FAEnabled { get; set; }
+public bool AuthenticatorApp2FAEnabled { get; set; }
+public bool Passkeys2FAEnabled { get; set; }
+```
+
 ## Step 1: Verify phone flow
 
 [VerifyPhone](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/VerifyPhone.cshtml.cs)
@@ -52,6 +61,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 [VerifyPhone2Fa](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/Manage/VerifyPhone2Fa.cshtml.cs)
 
 [DisablePhone2Fa](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/Manage/DisablePhone2Fa.cshtml.cs)
+
+> Note
+> All Enable and disable Razor Pages require updates to set the enabled authentication method.
 
 ## Step 3: 2FA phone flow
 
