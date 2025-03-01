@@ -62,8 +62,11 @@ public bool Passkeys2FAEnabled { get; set; }
 
 [DisablePhone2Fa](https://github.com/damienbod/IdentityOidcPhone2fa/blob/main/src/IdentityProvider/Pages/Account/Manage/DisablePhone2Fa.cshtml.cs)
 
-> Note
-> All Enable and disable Razor Pages require updates to set the enabled authentication method.
+```
+All Enable and disable Razor Pages require updates to set the enabled authentication method.
+
+- EnableAuthenticator
+```
 
 ## Step 3: 2FA phone flow
 
